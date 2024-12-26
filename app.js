@@ -1,4 +1,3 @@
-// app.js
 const http = require("http");
 const url = require("url");
 const querystring = require("querystring");
@@ -50,6 +49,21 @@ const server = http.createServer(async (req, res) => {
   const parsedUrl = url.parse(req.url, true);
   const pathname = parsedUrl.pathname.replace(/^\/+|\/+$/g, "");
   const method = req.method.toUpperCase();
+
+  // Allow CORS by setting appropriate headers
+  res.setHeader("Access-Control-Allow-Origin", "*"); // Allow any origin or specify your frontend URL
+  res.setHeader(
+    "Access-Control-Allow-Methods",
+    "GET, POST, PUT, DELETE, OPTIONS, PATCH"
+  );
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
+
+  // Pre-flight OPTIONS request
+  if (method === "OPTIONS") {
+    res.writeHead(200);
+    res.end();
+    return;
+  }
 
   // Routing
   try {
